@@ -4,7 +4,7 @@ module.exports = async function(req, res) {
   res.setHeader('Access-Control-Allow-Methods', 'GET,OPTIONS');
 
   // लिंक बिल्कुल एक ही लाइन में होना चाहिए
-  const liveMatchLink = "https://203-137-131-7.twitcasting.tv/tc.livehls/v1/streams/838127035/hls/1008.96/media.m3u8?useQSS=1";
+  const liveMatchLink = "https://hugh.cdn.rumble.cloud/live/mu10xuf3/slot-37/zta4-vncc/chunklist.m3u8";
   // रिस्पॉन्स भेजना
   res.status(200).json({ 
       success: true, 
