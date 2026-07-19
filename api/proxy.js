@@ -2,6 +2,7 @@ module.exports = async function(req, res) {
   // CORS को पूरी तरह Allow करना
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'GET,OPTIONS');
+  res.setHeader('Access-Control-Allow-Headers', '*');
 
   if (req.method === 'OPTIONS') {
     return res.status(200).end();
@@ -13,34 +14,38 @@ module.exports = async function(req, res) {
   }
 
   try {
+    // SonyLIV / OTT प्लेटफॉर्म के लिए एकदम सही हेडर्स
     const response = await fetch(targetUrl, {
       headers: {
-        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
-        'Referer': 'https://www.sonyliv.com/'
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36',
+        'Referer': 'https://www.sonyliv.com/',
+        'Origin': 'https://www.sonyliv.com/',
+        'Accept': '*/*'
       }
     });
 
-    // अगर फाइल m3u8 (प्लेलिस्ट) है
-    if (targetUrl.includes('.m3u8') || response.headers.get('content-type')?.includes('mpegurl')) {
+    if (!response.ok) {
+      return res.status(response.status).send(`Upstream Error: ${response.statusText}`);
+    }
+
+    const contentType = response.headers.get('content-type') || '';
+
+    // अगर यह .m3u8 (प्लेलिस्ट) फाइल है
+    if (targetUrl.includes('.m3u8') || contentType.includes('mpegurl') || contentType.includes('m3u8')) {
       const text = await response.text();
-      
-      // बेस URL निकालने का सबसे सही तरीका (ताकि आगे के वीडियो लिंक टूटे नहीं)
-      const urlObj = new URL(targetUrl);
-      const baseUrl = targetUrl.substring(0, targetUrl.lastIndexOf('/') + 1);
+      const baseObj = new URL(targetUrl);
       
       const modifiedM3u8 = text.split('\n').map(line => {
         const trimmed = line.trim();
+        // अगर लाइन खाली नहीं है और # से शुरू नहीं होती है, तो वह एक लिंक (URL) है
         if (trimmed && !trimmed.startsWith('#')) {
-          let fullUrl;
-          if (trimmed.startsWith('http')) {
-            fullUrl = trimmed;
-          } else if (trimmed.startsWith('/')) {
-            fullUrl = urlObj.origin + trimmed;
-          } else {
-            fullUrl = baseUrl + trimmed;
+          try {
+            // चाहे relative path हो या absolute, यह उसे एकदम सही URL बना देगा
+            const absoluteUrl = new URL(trimmed, baseObj.href).href;
+            return `https://${req.headers.host}/api/proxy?url=${encodeURIComponent(absoluteUrl)}`;
+          } catch (e) {
+            return line;
           }
-          // हर टुकड़े को भी Vercel Proxy के रास्ते भेजना
-          return `https://${req.headers.host}/api/proxy?url=${encodeURIComponent(fullUrl)}`;
         }
         return line;
       }).join('\n');
@@ -48,13 +53,13 @@ module.exports = async function(req, res) {
       res.setHeader('Content-Type', 'application/vnd.apple.mpegurl');
       return res.status(200).send(modifiedM3u8);
     } 
-    // अगर वीडियो का टुकड़ा (.ts फाइल) है
+    // अगर यह वीडियो का टुकड़ा (.ts / .aac / .m4s) है
     else {
       const buffer = await response.arrayBuffer();
-      res.setHeader('Content-Type', 'video/MP2T');
+      if (contentType) res.setHeader('Content-Type', contentType);
       return res.status(200).send(Buffer.from(buffer));
     }
   } catch (error) {
-    return res.status(500).send('Proxy Error');
+    return res.status(500).json({ error: 'Proxy Error', details: error.message });
   }
 };
