@@ -34,15 +34,16 @@ module.exports = async function(req, res) {
     if (targetUrl.includes('.m3u8') || contentType.includes('mpegurl') || contentType.includes('m3u8')) {
       const text = await response.text();
       const baseObj = new URL(targetUrl);
+      const protocol = req.headers['x-forwarded-proto'] || 'https';
+      const host = req.headers.host;
       
       const modifiedM3u8 = text.split('\n').map(line => {
         const trimmed = line.trim();
         // अगर लाइन खाली नहीं है और # से शुरू नहीं होती है, तो वह एक लिंक (URL) है
         if (trimmed && !trimmed.startsWith('#')) {
           try {
-            // चाहे relative path हो या absolute, यह उसे एकदम सही URL बना देगा
             const absoluteUrl = new URL(trimmed, baseObj.href).href;
-            return `https://${req.headers.host}/api/proxy?url=${encodeURIComponent(absoluteUrl)}`;
+            return `${protocol}://${host}/api/proxy?url=${encodeURIComponent(absoluteUrl)}`;
           } catch (e) {
             return line;
           }
