@@ -4,7 +4,7 @@ module.exports = async function(req, res) {
   res.setHeader('Access-Control-Allow-Methods', 'GET,OPTIONS');
 
   // आपका नया ottplus वाला लिंक यहाँ अपडेट कर दिया गया है
-  const liveMatchLink = "https://stream.ottplus.live/live/ten_1_hd_abr/live/ten_1_hd_720/chunks.m3u8";
+  const liveMatchLink = "https://stream.ottplus.live/live/ten_1_hd_abr/live/ten_1_hd_1080/chunks.m3u8";
 
   // रिस्पॉन्स भेजना
   res.status(200).json({ 
