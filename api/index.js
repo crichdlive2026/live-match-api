@@ -13,7 +13,7 @@ module.exports = async function(req, res) {
   }
 
   // 👇 आपका नया लाइव मैच का M3U8 लिंक 👇
-  const liveContent = "https://s1.itcnbd.live/T-Sports-HD/tracks-v1a1/mono.m3u8";
+  const liveContent = "https://7nyaler.streamhostingcdn.top/stream/10/index.m3u8";
 
   res.status(200).send(JSON.stringify({ 
       success: true, 
