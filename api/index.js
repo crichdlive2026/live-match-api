@@ -13,7 +13,7 @@ module.exports = async function(req, res) {
   }
 
   // 👇 आपका नया लाइव मैच का M3U8 लिंक 👇
-  const liveContent = "https://in-mc-flive.fancode.com/mumbai/4248352_hindi_hls_35cc2e3af442591_1ta-di_h264/1080p.m3u8?hdntl=Expires=1787649271~_GO=Generated~acl=/mumbai/4248352_hindi_hls_35cc2e3af442591_1ta-di_h264/*~Signature=ARB3KG3coJ2zZnSNID_aqkAtkGNa3W_0lbxD8smD0HbKRGfXkt228DvMeV89DVRSNz4a7KpZHBFRmFPJkpDwk8sKwGsN";
+  const liveContent = "https://s1.itcnbd.live/T-Sports-HD/tracks-v1a1/mono.m3u8";
 
   res.status(200).send(JSON.stringify({ 
       success: true, 
