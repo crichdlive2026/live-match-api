@@ -13,7 +13,7 @@ module.exports = async function(req, res) {
   }
 
   // 👇 आपका नया लाइव मैच का M3U8 लिंक 👇
-  const liveContent = "https://stream.ottplus.live/live/ten_cricket_hd_abr/live/ten_cricket_hd_720/chunks.m3u8";
+  const liveContent = "https://stream.crichdlive.in/live/naresh.m3u8";
 
   res.status(200).send(JSON.stringify({ 
       success: true, 
