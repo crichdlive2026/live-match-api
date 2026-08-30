@@ -13,7 +13,7 @@ module.exports = async function(req, res) {
   }
 
   // 👇 आपका नया लाइव मैच का M3U8 लिंक 👇
-  const liveContent = "https://stream.crichdlive.in/live/naresh.m3u8";
+  const liveContent = "https://s3.itcnbd.live/server-4/stream/aHR0cDovLzE3Mi4xOS4xNy4yMDI6ODA5MC9obHMvU29ueVRlbjJoZC5tM3U4.m3u8";
 
   res.status(200).send(JSON.stringify({ 
       success: true, 
