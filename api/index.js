@@ -13,7 +13,7 @@ module.exports = async function(req, res) {
   }
 
   // 👇 आपका नया लाइव मैच का M3U8 लिंक 👇
-  const liveContent = "https://stream.crichdlive.in/live/naresh.m3u8";
+  const liveContent = "https://dai-fancode.pages.dev/out/v1/ap-south-1/4248493_hindi_150048/ad-h264/index.m3u8";
 
   res.status(200).send(JSON.stringify({ 
       success: true, 
