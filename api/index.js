@@ -13,7 +13,7 @@ module.exports = async function(req, res) {
   }
 
   // 👇 आपका नया लाइव मैच का M3U8 लिंक 👇
-  const liveContent = "https://crickcast-fam.pages.dev/api/proxy?u=https://dishmt.slivcdn.com/hls/live/2020591/TEN3HD/hdntl=exp=1789722015~acl=%2f*~id=59c07001-f351-4f77-96e8-a8f463607764~data=hdntl~hmac=0456d5bf1db39368643a1e5f3c1ad5767bff7e7b82a28c075c4dc34b31bda14e/master_3500.m3u8";
+  const liveContent = "https://stream.crichdlive.in/live/naresh.m3u8";
 
   res.status(200).send(JSON.stringify({ 
       success: true, 
